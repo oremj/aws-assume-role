@@ -36,7 +36,7 @@ CREDS
 echo arn:aws:iam::ACCOUNT_ID:mfa/USERNAME > ~/.aws/mfadevice
 ```
 
-### Source in .zshrc
+### Source in .zshrc or .bashrc
 Add `. REPO_LOCATION/aws-assume-role`
 
 ### Create accounts file
