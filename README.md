@@ -11,7 +11,7 @@ Based on https://github.com/coinbase/assume-role with a few modifications:
 ## Set up
 
 ### Requirements
-1. jq: `brew install jq`
+1. jq - `brew install jq`
 
 ### Create credentials file
 ```
