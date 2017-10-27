@@ -30,7 +30,7 @@ CREDS
 ### Create mfadevice file
 
 ```
-echo arn:aws:iam::ACCOUNT_ID:mfa/USERNAME > ~/.aws/credentials.gpg
+echo arn:aws:iam::ACCOUNT_ID:mfa/USERNAME > ~/.aws/mfadevice
 ```
 
 ### Source in .zshrc
