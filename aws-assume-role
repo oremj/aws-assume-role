@@ -147,6 +147,26 @@ _aws-assume-role() {
     fi
 }
 
+_aws-assume-role-bash() {
+    local accounts
+    local cur=$2
+    if [ ${COMP_CWORD} -eq 1 ]; then
+        accounts=$(jq -r 'keys[]' < ~/.aws/accounts)
+        COMPREPLY=( $(compgen -W "$accounts" -- ${cur}) )
+        return
+    fi
+    if [ ${COMP_CWORD} -eq 2 ]; then
+        local account
+        account=${COMP_WORDS[1]}
+        local roles=$(jq -r ".[\"${account}\"].roles[]" < ~/.aws/accounts 2>/dev/null)
+        if [[ -z $roles ]] || [[ "$roles" == "null" ]]; then
+            roles="aws_admin_role"
+        fi
+        COMPREPLY=( $(compgen -W "$roles" -- ${cur}) )
+        return
+    fi
+}
+
 # AWS ACCOUNT NAME
 function prompt-aws-account-info {
     local region
@@ -158,6 +178,7 @@ function prompt-aws-account-info {
 
 if [[ -n "$ZSH_NAME" ]]; then
     PROMPT="$PROMPT\$(prompt-aws-account-info)"
-
     compdef _aws-assume-role aws-assume-role
+elif [[ -n "$BASH" ]]; then
+    complete -F _aws-assume-role-bash aws-assume-role
 fi

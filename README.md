@@ -6,6 +6,7 @@ Based on https://github.com/coinbase/assume-role with a few modifications:
 * Reads GPG encrypted base credentials
 * Base credentials do not need GetUser permissions
 * ZSH auto completion
+* Bash auto completion
 * List of roles in accounts file for role auto completion
 
 ## Usage
