@@ -8,6 +8,7 @@ Based on https://github.com/coinbase/assume-role with a few modifications:
 * ZSH auto completion
 * Bash auto completion
 * List of roles in accounts file for role auto completion
+* Validates assumed role against sts:get-caller-identity
 
 ## Usage
 Assuming account1 is the account alias in ~/.aws/accounts and root is the role to be assumed.
