@@ -19,6 +19,7 @@ aws-assume-role account1 root
 
 ### Requirements
 1. jq - `brew install jq`
+2. [AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/installing.html)
 
 ### Create credentials file
 ```
