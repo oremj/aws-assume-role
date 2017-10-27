@@ -156,6 +156,8 @@ function prompt-aws-account-info {
     [ "$AWS_ACCOUNT_NAME" ] && [ "$AWS_ACCOUNT_ROLE" ] && echo "%{$fg[blue]%}aws:(%{$fg[red]%}${AWS_ACCOUNT_NAME}${region}%{$fg[blue]%})%{$reset_color%} "
 }
 
-PROMPT="$PROMPT\$(prompt-aws-account-info)"
+if [[ -n "$ZSH_NAME" ]]; then
+    PROMPT="$PROMPT\$(prompt-aws-account-info)"
 
-compdef _aws-assume-role aws-assume-role
+    compdef _aws-assume-role aws-assume-role
+fi
