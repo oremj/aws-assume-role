@@ -70,7 +70,7 @@ aws-assume-role() {
     local accountid region
 
     if [[ -z "$role" ]]; then
-        echo "usage: aws-assume-role <accountid> <role> [mfa-token]"
+        echo "usage: aws-assume-role <accountid> <role>"
         return 1
     fi
 
