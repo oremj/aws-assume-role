@@ -84,6 +84,7 @@ aws-assume-role() {
     unset AWS_ACCOUNT_NAME
     unset AWS_ACCOUNT_ROLE
     unset AWS_DEFAULT_REGION
+    unset AWS_REGION
 
     _aws-assume-role-reuse-session
 
@@ -128,6 +129,7 @@ aws-assume-role() {
         export AWS_DEFAULT_REGION=$AWS_ASSUME_ROLE_DEFAULT_REGION
         echo "No default region"
     fi
+    export AWS_REGION=$AWS_DEFAULT_REGION
     echo "Setting region to: $AWS_DEFAULT_REGION"
 }
 
