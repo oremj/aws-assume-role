@@ -21,7 +21,7 @@ _aws-assume-role-reset-env() {
 _aws-assume-role-activate-base-creds() {
     _aws-assume-role-reset-env
 
-    . <(gpg -d "$CRED_FILE")
+    eval "$(gpg -d "$CRED_FILE")"
 }
 
 _aws-assume-role-reuse-session() {
