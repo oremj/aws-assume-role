@@ -41,13 +41,15 @@ _aws-assume-role-activate-session() {
     echo -n "MFA Token: "
     read mfa_token
 
-    aws sts get-session-token \
+
+    read access_key secret_key session_token < <(
+        aws sts get-session-token \
         --duration-seconds $AWS_ASSUME_ROLE_SESSION_TIMEOUT \
         --serial-number "${MFA_DEVICE}" \
         --token-code "${mfa_token}" \
-        --output text --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" | read access_key secret_key session_token
+        --output text --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]")
 
-    if [ $? -ne 0 ]; then
+    if [[ $? -ne 0 || -z $access_key || -z $secret_key || -z $session_token ]]; then
         echo "aws get-session-token failed"
         return 1
     fi
@@ -95,11 +97,12 @@ aws-assume-role() {
         fi
     fi
 
-
-    aws sts assume-role --role-arn "arn:aws:iam::${accountid}:role/${role}" \
+    read access_key secret_key session_token < <(
+        aws sts assume-role --role-arn "arn:aws:iam::${accountid}:role/${role}" \
         --role-session-name "${USER}-$(date +%s)" \
-        --output text --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" | read access_key secret_key session_token
-    if [ $? -ne 0 ]; then
+        --output text --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]")
+
+    if [[ $? -ne 0 || -z $access_key || -z $secret_key || -z $session_token ]]; then
         echo "aws sts assume-role failed"
         return 1
     fi
