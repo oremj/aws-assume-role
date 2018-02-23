@@ -16,6 +16,12 @@ Assuming account1 is the account alias in ~/.aws/accounts and root is the role t
 aws-assume-role account1 root
 ```
 
+## Options
+
+`AWS_ASSUME_ROLE_CACHE_TO_FILE`
+
+If `AWS_ASSUME_ROLE_CACHE_CREDENTIALS_TO_FILE=true` is set, the master session credentials will be written to file and will be reused for multiple terminal sessions.
+
 ## Set up
 
 ### Requirements
