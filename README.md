@@ -20,7 +20,7 @@ aws-assume-role account1 root
 
 `AWS_ASSUME_ROLE_CACHE_TO_FILE`
 
-If `AWS_ASSUME_ROLE_CACHE_CREDENTIALS_TO_FILE=true` is set, the master session credentials will be written to file and will be reused for multiple terminal sessions.
+If set to `true`, the master session credentials will be written to file and will be reused for multiple terminal sessions.
 
 ## Set up
 
