@@ -8,7 +8,7 @@ AWS_ASSUME_ROLE_SESSION_TIMEOUT=${AWS_ASSUME_ROLE_SESSION_TIMEOUT:-7200}
 AWS_ASSUME_ROLE_DEFAULT_REGION=${AWS_ASSUME_ROLE_DEFAULT_REGION:-us-west-2}
 
 AWS_ASSUME_ROLE_CACHE_TO_FILE=${AWS_ASSUME_ROLE_CACHE_TO_FILE:-false}
-AWS_ASSUME_ROLE_CACHE_FILE=${AWS_ASSUME_ROLE_CACHE_FILE:-~/.aws/.aws-assume-role-master-creds}
+AWS_ASSUME_ROLE_CACHE_FILE=${AWS_ASSUME_ROLE_CACHE_FILE:-${TMPDIR:-/tmp/}/.${USER}-aws-assume-role-master-creds}
 
 _aws-assume-role-account-alias() {
     aws iam list-account-aliases --output text --query "AccountAliases[0]"
