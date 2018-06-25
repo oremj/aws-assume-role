@@ -7,6 +7,9 @@ MFA_DEVICE=$(cat "${MFA_DEVICE_FILE}")
 AWS_ASSUME_ROLE_SESSION_TIMEOUT=${AWS_ASSUME_ROLE_SESSION_TIMEOUT:-7200}
 AWS_ASSUME_ROLE_DEFAULT_REGION=${AWS_ASSUME_ROLE_DEFAULT_REGION:-us-west-2}
 
+AWS_ASSUME_ROLE_CACHE_TO_FILE=${AWS_ASSUME_ROLE_CACHE_TO_FILE:-false}
+AWS_ASSUME_ROLE_CACHE_FILE=${AWS_ASSUME_ROLE_CACHE_FILE:-${TMPDIR:-/tmp/}/.${USER}-aws-assume-role-master-creds}
+
 _aws-assume-role-account-alias() {
     aws iam list-account-aliases --output text --query "AccountAliases[0]"
 }
@@ -25,10 +28,22 @@ _aws-assume-role-activate-base-creds() {
 }
 
 _aws-assume-role-reuse-session() {
+    local access_key secret_key session_token
+
     export AWS_ACCESS_KEY_ID=$AWS_SESSION_ACCESS_KEY_ID
     export AWS_SECRET_ACCESS_KEY=$AWS_SESSION_SECRET_ACCESS_KEY
     export AWS_SECURITY_TOKEN=$AWS_SESSION_SESSION_TOKEN
     export AWS_SESSION_TOKEN=$AWS_SESSION_SESSION_TOKEN
+
+    if [[ $AWS_ASSUME_ROLE_CACHE_TO_FILE == "true" && \
+          -z $AWS_SESSION_TOKEN && \
+          -f $AWS_ASSUME_ROLE_CACHE_FILE ]]; then
+        read access_key secret_key session_token < $AWS_ASSUME_ROLE_CACHE_FILE
+        export AWS_ACCESS_KEY_ID=$access_key
+        export AWS_SECRET_ACCESS_KEY=$secret_key
+        export AWS_SECURITY_TOKEN=$session_token
+        export AWS_SESSION_TOKEN=$session_token
+    fi
 }
 
 _aws-assume-role-activate-session() {
@@ -53,6 +68,13 @@ _aws-assume-role-activate-session() {
     if [[ $? -ne 0 || -z $access_key || -z $secret_key || -z $session_token ]]; then
         echo "aws get-session-token failed"
         return 1
+    fi
+
+    # Cache session credentials
+    if [[ $AWS_ASSUME_ROLE_CACHE_TO_FILE == "true" ]]; then
+        touch "${AWS_ASSUME_ROLE_CACHE_FILE}"
+        chmod 600 "${AWS_ASSUME_ROLE_CACHE_FILE}"
+        echo $access_key $secret_key $session_token > "${AWS_ASSUME_ROLE_CACHE_FILE}"
     fi
 
     AWS_SESSION_START=$(date +%s)
