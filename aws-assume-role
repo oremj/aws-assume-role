@@ -95,8 +95,13 @@ aws-assume-role() {
     local accountid region
 
     if [[ -z "$role" ]]; then
-        echo "usage: aws-assume-role <accountid> <role>"
-        return 1
+        # default to first in list
+        role=$(jq -r ".[\"${accountname}\"].roles[0]" < ~/.aws/accounts)
+        if [[ -z $role ]] || [[ "$role" == "null" ]]; then
+            # default if no roles in list
+            role="aws_admin_role"
+        fi
+        echo "No role specified, defaulting to ${role}"
     fi
 
     accountid=$(jq -r ".[\"${accountname}\"].id" < ~/.aws/accounts)
