@@ -29,12 +29,20 @@ If set to `true`, the master session credentials will be written to file and wil
 2. [AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/installing.html)
 
 ### Create credentials file
+
+| **NOTE** | This is _not_ an encrypted version of `~/.aws/credentials`, which is used by many AWS cli tools |
+| -------- | --- |
+
+
 ```
 cat <<CREDS | gpg -e -r GPG_KEY_ID > ~/.aws/credentials.gpg
 export AWS_ACCESS_KEY_ID=.....
 export AWS_SECRET_ACCESS_KEY=.....
 CREDS
 ```
+
+Do not delete the `~/.aws/credentials` file, as it is needed by AWS cli
+tools that do not need/utilize `aws-assume-role`.
 
 ### Create mfadevice file
 
